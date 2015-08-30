@@ -67,11 +67,18 @@ entryItem entry =
 entryList entries =
   ul [] (List.map entryItem entries)
 
+sortButton address =
+  button 
+    [ class "sort", onClick address Sort ] 
+    [ text "Sort" ]
+
+
 view model =
   div [ id "container" ]
     [
       pageHeader,
       entryList model.entries,
+      sortButton address,
       pageFooter
     ]
 
