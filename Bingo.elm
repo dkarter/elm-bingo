@@ -23,20 +23,28 @@ pageFooter =
         [ text "Dorian Karter Home Page" ]
     ]
 
-entryItem phrase points =
+newEntry phrase points id =
+  {
+    phrase = phrase,
+    points = points,
+    wasSpoken = False,
+    id = id
+  }
+
+entryItem entry =
   li []
     [
-      span [ class "phrase" ] [ text phrase ],
-      span [ class "points" ] [ text (toString points) ]
+      span [ class "phrase" ] [ text entry.phrase ],
+      span [ class "points" ] [ text (toString entry.points) ]
     ]
 
 entryList =
   ul []
     [
-      entryItem "Future-Proof" 200,
-      entryItem "Agile" 400,
-      entryItem "Reactive" 230,
-      entryItem "Pragmatic" 800
+      entryItem (newEntry "Future-Proof" 200 1),
+      entryItem (newEntry "Agile" 400 2),
+      entryItem (newEntry "Reactive" 230 3),
+      entryItem (newEntry "Pragmatic" 800 4)
     ]
 
 view =
