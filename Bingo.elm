@@ -20,7 +20,7 @@ pageFooter =
   footer []
     [
       a [ href "http://doriankarter.com" ]
-        [ text "Dorian Karter Home Page" ]
+        [ text "Dorian Karter" ]
     ]
 
 newEntry phrase points id =
