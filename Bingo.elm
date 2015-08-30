@@ -70,9 +70,10 @@ newEntry phrase points id =
   }
 
 totalPoints entries =
-  let spokenEntries = List.filter .wasSpoken entries
-  in
-    List.sum ( List.map .points spokenEntries )
+  entries
+    |> List.filter .wasSpoken
+    |> List.map .points
+    |> List.sum
 
 totalItem total = 
   li 
