@@ -21,7 +21,7 @@ initialModel =
 
 -- UPDATE
 type Action =
-  NoOp | Sort
+  NoOp | Sort | Delete Int
 
 update action model =
   case action of
@@ -30,6 +30,13 @@ update action model =
 
     Sort->
       { model | entries <- List.sortBy .points model.entries }
+
+    Delete id ->
+      let remainingEntries =
+        List.filter (\e -> e.id /= id) model.entries
+
+      in
+        { model | entries <- remainingEntries }
 
 -- VIEW
 title message times =
@@ -57,27 +64,32 @@ newEntry phrase points id =
     id = id
   }
 
-entryItem entry =
+entryItem address entry =
   li []
     [
       span [ class "phrase" ] [ text entry.phrase ],
-      span [ class "points" ] [ text (toString entry.points) ]
+      span [ class "points" ] [ text (toString entry.points) ],
+      deleteButton address entry.id
     ]
 
-entryList entries =
-  ul [] (List.map entryItem entries)
+entryList address entries =
+  ul [] (List.map ( entryItem address ) entries)
 
 sortButton address =
   button 
     [ class "sort", onClick address Sort ] 
     [ text "Sort" ]
 
+deleteButton address id =
+  button 
+    [ class "delete", onClick address ( Delete id ) ] 
+    []
 
-view model =
+view address model =
   div [ id "container" ]
     [
       pageHeader,
-      entryList model.entries,
+      entryList address model.entries,
       sortButton address,
       pageFooter
     ]
