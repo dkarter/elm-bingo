@@ -3,6 +3,8 @@ module Bingo where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import StartApp
+
 import String exposing (toUpper, repeat, trim)
 
 -- MODEL
