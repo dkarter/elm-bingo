@@ -3,11 +3,24 @@ module Bingo where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Signal exposing (Address)
 import StartApp
 
 import String exposing (toUpper, repeat, trim)
 
 -- MODEL
+type alias Entry =
+  {
+    id: Int,
+    phrase: String,
+    wasSpoken: Bool,
+    points: Int
+  }
+
+type alias Model =
+  { entries: List Entry }
+
+initialModel : Model
 initialModel =
   {
     entries =
@@ -23,6 +36,7 @@ initialModel =
 type Action =
   NoOp | Sort | Delete Int | Mark Int
 
+update : Action -> Model -> Model
 update action model =
   case action of
     NoOp ->
@@ -44,6 +58,7 @@ update action model =
         { model | entries <- List.map updateEntry model.entries }
 
 -- VIEW
+title : String -> Int -> Html
 title message times =
   message ++ " "
     |> toUpper
@@ -51,9 +66,11 @@ title message times =
     |> trim
     |> text
 
+pageHeader : Html
 pageHeader =
   h1 [ id "logo", class "classy" ] [ title "Bingo!" 3 ]
 
+pageFooter : Html
 pageFooter =
   footer []
     [
@@ -61,6 +78,7 @@ pageFooter =
         [ text "Dorian Karter" ]
     ]
 
+newEntry : String -> Int -> Int -> Entry
 newEntry phrase points id =
   {
     phrase = phrase,
@@ -69,12 +87,14 @@ newEntry phrase points id =
     id = id
   }
 
+totalPoints : List Entry -> Int
 totalPoints entries =
   entries
     |> List.filter .wasSpoken
     |> List.map .points
     |> List.sum
 
+totalItem : Int -> Html
 totalItem total = 
   li 
     [ class "total" ]
@@ -83,6 +103,7 @@ totalItem total =
       span [ class "points" ] [ text (toString total) ]
     ]
 
+entryItem : Address Action -> Entry -> Html
 entryItem address entry =
   li 
     [
@@ -95,6 +116,7 @@ entryItem address entry =
       deleteButton address entry.id
     ]
 
+entryList : Address Action -> List Entry -> Html
 entryList address entries =
   let
     entryItems = List.map ( entryItem address ) entries
@@ -102,16 +124,19 @@ entryList address entries =
   in
     ul [] items
 
+sortButton : Address Action -> Html
 sortButton address =
   button 
     [ class "sort", onClick address Sort ] 
     [ text "Sort" ]
 
+deleteButton : Address Action -> Int -> Html
 deleteButton address id =
   button 
     [ class "delete", onClick address ( Delete id ) ] 
     []
 
+view : Address Action -> Model -> Html
 view address model =
   div [ id "container" ]
     [
@@ -123,6 +148,7 @@ view address model =
 
 -- WIRE IT ALL TOGETHER
 
+main : Signal Html
 main =
   StartApp.start
     {
