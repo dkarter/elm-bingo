@@ -43,8 +43,8 @@ entryList =
     [
       entryItem (newEntry "Future-Proof" 200 1),
       entryItem (newEntry "Agile" 400 2),
-      entryItem (newEntry "Reactive" 230 3),
-      entryItem (newEntry "Pragmatic" 800 4)
+      entryItem (newEntry "Data Science" 230 3),
+      entryItem (newEntry "In the Cloud" 800 4)
     ]
 
 view =
