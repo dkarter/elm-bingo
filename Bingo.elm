@@ -78,6 +78,9 @@ view model =
 -- WIRE IT ALL TOGETHER
 
 main =
-  initialModel
-      |> update Sort
-      |> view
+  StartApp.start
+    {
+      model = initialModel,
+      update = update,
+      view = view
+    }
