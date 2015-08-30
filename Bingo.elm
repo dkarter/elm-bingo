@@ -21,7 +21,7 @@ initialModel =
 
 -- UPDATE
 type Action =
-  NoOp | Sort | Delete Int
+  NoOp | Sort | Delete Int | Mark Int
 
 update action model =
   case action of
@@ -34,9 +34,14 @@ update action model =
     Delete id ->
       let remainingEntries =
         List.filter (\e -> e.id /= id) model.entries
-
       in
         { model | entries <- remainingEntries }
+
+    Mark id ->
+      let updateEntry e =
+        if e.id == id then { e | wasSpoken <- (not e.wasSpoken) } else e
+      in
+        { model | entries <- List.map updateEntry model.entries }
 
 -- VIEW
 title message times =
@@ -65,7 +70,11 @@ newEntry phrase points id =
   }
 
 entryItem address entry =
-  li []
+  li 
+    [
+      onClick address (Mark entry.id),
+      classList [ ("highlight", entry.wasSpoken) ]
+    ]
     [
       span [ class "phrase" ] [ text entry.phrase ],
       span [ class "points" ] [ text (toString entry.points) ],
